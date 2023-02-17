@@ -5,8 +5,8 @@
 #include <QRect>
 #define MIN_height 740
 #define MIN_width 580
-#define MAX_height 1200
-#define MAX_width 1600
+#define MAX_height 1600
+#define MAX_width 1800
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
