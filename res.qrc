@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/onstart">
+        <file>res/onstart.jpg</file>
+        <file>res/onstart2h.jpg</file>
+        <file>res/onstart3.jpg</file>
+        <file>res/onstart4.jpg</file>
+    </qresource>
+    <qresource prefix="/">
+        <file>res/onstart01.png</file>
+    </qresource>
+</RCC>

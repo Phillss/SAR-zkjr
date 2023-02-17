@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu123">
+    <property name="title">
+     <string>文件</string>
+    </property>
+    <addaction name="actiondaoru"/>
+    <addaction name="actiondaochu"/>
+    <addaction name="actionxinxi"/>
+   </widget>
+   <widget class="QMenu" name="menubianji">
+    <property name="title">
+     <string>编辑</string>
+    </property>
+    <addaction name="actionduibi"/>
+    <addaction name="actiontuxiang"/>
+    <addaction name="actiontuxiang_2"/>
+   </widget>
+   <addaction name="menu123"/>
+   <addaction name="menubianji"/>
+  </widget>
+  <action name="actiondaoru">
+   <property name="text">
+    <string>文件导入</string>
+   </property>
+  </action>
+  <action name="actiondaochu">
+   <property name="text">
+    <string>文件导出</string>
+   </property>
+  </action>
+  <action name="actionxinxi">
+   <property name="text">
+    <string>文件信息</string>
+   </property>
+  </action>
+  <action name="actionduibi">
+   <property name="text">
+    <string>对比度拉伸</string>
+   </property>
+  </action>
+  <action name="actiontuxiang">
+   <property name="text">
+    <string>图像旋转</string>
+   </property>
+  </action>
+  <action name="actiontuxiang_2">
+   <property name="text">
+    <string>图像翻转</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
