@@ -16,7 +16,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1">
     <item>
-     <widget class="QWidget" name="_leftwidget" native="true">
+     <widget class="QWidget" name="left_widget" native="true">
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QTreeView" name="treeView">
@@ -35,14 +35,37 @@
     </item>
     <item>
      <widget class="QWidget" name="center_widget" native="true">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>12</horstretch>
+        <verstretch>12</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="sizeIncrement">
+       <size>
+        <width>3</width>
+        <height>3</height>
+       </size>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>true</bool>
+      </property>
       <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QGraphicsView" name="graphicsView">
-         <property name="dragMode">
-          <enum>QGraphicsView::ScrollHandDrag</enum>
-         </property>
-        </widget>
-       </item>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="bottomMargin">
+        <number>0</number>
+       </property>
       </layout>
      </widget>
     </item>
@@ -102,6 +125,7 @@
     <property name="title">
      <string>查看</string>
     </property>
+    <addaction name="action"/>
    </widget>
    <addaction name="menu123"/>
    <addaction name="menubianji"/>
@@ -135,6 +159,11 @@
   <action name="actiontuxiang_2">
    <property name="text">
     <string>图像翻转</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>处理结果</string>
    </property>
   </action>
  </widget>

@@ -1,11 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include <QElapsedTimer>
-#include <QScreen>
-#include <QRect>
-#include <QDebug>
-#include <QFile>
-#include <QFileDialog>
 
 #define MIN_height 740
 #define MIN_width 580
@@ -32,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     if(remove.exists()){
         remove.removeRecursively();
     }
+
 //    QElapsedTimer t;
 //    t.start();
 //    while(t.elapsed()<2500)
@@ -39,22 +34,25 @@ MainWindow::MainWindow(QWidget *parent)
     model=new QStandardItemModel(ui->treeView);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<QStringLiteral("文件列表"));
-//    for(int i=0;i<20;i++){
-//        model->setItem(i,0,new QStandardItem("onstart.jpg"));
-//        model->item(i,0)->setChild(0,0,new QStandardItem("23"));
-//        model->item(i,0)->setChild(1,0,new QStandardItem("23"));
-//    }
     connect(ui->treeView,&QTreeView::clicked,this,&MainWindow::select);
+    scene=new QGraphicsScene();
+    view=new QGraphicsView(scene);
+    view->setParent(ui->center_widget);
 }
 void MainWindow::select(const QModelIndex &index){
+    scene->clear();
     QVariant v=index.data();
     QString n=v.toString();
     QString temp=loadfilename+"/"+n;
-    QGraphicsScene *scen=new QGraphicsScene;
-    scen->addPixmap(QPixmap(temp));
-    ui->graphicsView->setScene(scen);
-    ui->graphicsView->show();
-//    image->load()
+    image_scaled_widget *ll=new image_scaled_widget();
+    QPixmap *pix=new QPixmap();
+    pix->load(temp);
+    ll->change_new_image(pix,NUL);
+    scene->addItem(ll);
+    view->fitInView(ll,Qt::KeepAspectRatio);
+    view->show();
+    onclicked=temp;
+    currentPix=pix;
 }
 MainWindow::~MainWindow()
 {
@@ -75,8 +73,47 @@ void MainWindow::on_actiondaoru_triggered()
         QFile::copy(currFilePath,loadfilename+"/"+filefull);
     }
     QStandardItem *item=new QStandardItem(fileinfor.baseName());
-    qDebug()<<fileinfor.baseName();
     int currrowcount=model->rowCount();
     model->setItem(currrowcount,0,item);
+}
+
+
+void MainWindow::on_actiondaochu_triggered()
+{
+    ef=new ExportFile(this);
+    ef->show();
+}
+
+
+void MainWindow::on_action_triggered()
+{
+    res=new ShowRes(this);
+    res->show();
+}
+
+//图像旋转
+void MainWindow::on_actiontuxiang_triggered()
+{
+    scene->clear();
+    bool a=t!=NULL;
+    bool b=t==onclicked;
+    qDebug()<<a<<" ::"<<b<<t<<":"<<onclicked;
+    if(t!=NULL&&t==onclicked){
+        re=(re+90)%360;
+        qDebug()<<re;
+    }else{
+        re=90;
+    }
+    QMatrix matrix;
+    matrix.rotate(re);
+    if(currentPix!=NULL){
+        QPixmap tt=currentPix->transformed(matrix,Qt::SmoothTransformation);
+        image_scaled_widget *ls=new image_scaled_widget();
+        ls->change_new_image(&tt,NUL);
+        scene->addItem(ls);
+        view->fitInView(ls,Qt::KeepAspectRatio);
+        view->show();
+    }
+    t=onclicked;
 }
 

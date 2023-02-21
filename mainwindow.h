@@ -3,6 +3,20 @@
 
 #include <QMainWindow>
 #include <QStandardItemModel>
+#include <QElapsedTimer>
+#include <QScreen>
+#include <QRect>
+#include <QDebug>
+#include <QFile>
+#include <QFileDialog>
+#include <QGraphicsView>
+#include <QGraphicsScale>
+#include <QWheelEvent>
+#include <QMouseEvent>
+#include "image_scaled_widget.h"
+#include "exportfile.h"
+#include "showres.h"
+#include <QMatrix>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -26,7 +40,24 @@ public:
 private slots:
     void on_actiondaoru_triggered();
 
+    void on_actiondaochu_triggered();
+
+    void on_action_triggered();
+
+    void on_actiontuxiang_triggered();
+
 private:
     Ui::MainWindow *ui;
+    QGraphicsScene *scene;
+    QGraphicsView *view;
+    QPointF lastpoint;
+    qreal scale=1;
+    ExportFile *ef;
+    ShowRes *res;
+    QString onclicked;
+    QPixmap *currentPix;
+    QByteArray NUL;
+    int re;
+    QString t;
 };
 #endif // MAINWINDOW_H
