@@ -27,10 +27,10 @@ MainWindow::MainWindow(QWidget *parent)
         remove.removeRecursively();
     }
 
-    QElapsedTimer t;
-    t.start();
-    while(t.elapsed()<2500)
-        QCoreApplication::processEvents();
+//    QElapsedTimer t;
+//    t.start();
+//    while(t.elapsed()<2500)
+//        QCoreApplication::processEvents();
     model=new QStandardItemModel(ui->treeView);
     ui->treeView->setModel(model);
     model->setHorizontalHeaderLabels(QStringList()<<QStringLiteral("文件列表"));
@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent)
     view=ui->graphicsView;
     view->setParent(ui->center_widget);
     alertDia=new Alert();
+//    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
 }
 void MainWindow::select(const QModelIndex &index){
     scene->clear();
@@ -61,7 +62,7 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
+//文件导入窗口
 void MainWindow::on_actiondaoru_triggered()
 {
 //    QString currFilePath=QFileDialog::getOpenFileName(this,homePath);
@@ -85,18 +86,41 @@ void MainWindow::on_actiondaoru_triggered()
     }
 }
 
-
+//文件导出窗口
 void MainWindow::on_actiondaochu_triggered()
 {
     ef=new ExportFile(this);
     ef->show();
 }
 
-
-void MainWindow::on_action_triggered()
+//对比度调节窗口
+void MainWindow::on_actionduibi_triggered()
 {
-    res=new ShowRes(this);
-    res->show();
+    ratio=new ConRatio(this);
+    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
+    ratio->show();
+}
+//
+void MainWindow::recieveValue(int value){
+    scene->clear();
+    if(onclicked!=NULL){
+        if(t==onclicked){
+            mirrored=MainWindow::AdjustContrast(pre,value);
+            qDebug()<<"==";
+        }else{
+            QImage img(onclicked);
+            mirrored=AdjustContrast(img,value);
+            qDebug()<<"!=";
+        }
+        pre=mirrored;
+        QPixmap mp=QPixmap::fromImage(mirrored);
+        image_scaled_widget *ls=new image_scaled_widget();
+        ls->change_new_image(&mp,NUL);
+        scene->addItem(ls);
+        view->fitInView(ls,Qt::KeepAspectRatio);
+        view->show();
+    }
+    t=onclicked;
 }
 
 //图像旋转
@@ -141,7 +165,6 @@ void MainWindow::on_actiontuxiang_2_triggered()
         scene->addItem(ls);
         view->fitInView(ls,Qt::KeepAspectRatio);
         view->show();
-
     }
     t=onclicked;
 }
@@ -169,9 +192,60 @@ void MainWindow::on_action_2_triggered()
 }
 
 
-void MainWindow::on_actionduibi_triggered()
+//图片对比度调节
+//QImage AdjustContrast(QImage Img, int iContrastValue)
+//{
+//    int pixels = Img.width() * Img.height();
+//    unsigned int *data = (unsigned int *)Img.bits();
+
+//    int red, green, blue, nRed, nGreen, nBlue;
+
+//    if (iContrastValue > 0 && iContrastValue < 100)
+//    {
+//        float param = 1 / (1 - iContrastValue / 100.0) - 1;
+
+//        for (int i = 0; i < pixels; ++i)
+//        {
+//            nRed = qRed(data[i]);
+//            nGreen = qGreen(data[i]);
+//            nBlue = qBlue(data[i]);
+
+//            red = nRed + (nRed - 127) * param;
+//            red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
+//            green = nGreen + (nGreen - 127) * param;
+//            green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
+//            blue = nBlue + (nBlue - 127) * param;
+//            blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
+
+//            data[i] = qRgba(red, green, blue, qAlpha(data[i]));
+//        }
+//    }
+//    else
+//    {
+//        for (int i = 0; i < pixels; ++i)
+//        {
+//            nRed = qRed(data[i]);
+//            nGreen = qGreen(data[i]);
+//            nBlue = qBlue(data[i]);
+
+//            red = nRed + (nRed - 127) * iContrastValue / 100.0;
+//            red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
+//            green = nGreen + (nGreen - 127) * iContrastValue / 100.0;
+//            green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
+//            blue = nBlue + (nBlue - 127) * iContrastValue / 100.0;
+//            blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
+
+//            data[i] = qRgba(red, green, blue, qAlpha(data[i]));
+//        }
+//    }
+
+//    return Img;
+//}
+
+//显示处理结果窗口
+void MainWindow::on_action_triggered()
 {
-    ratio=new ConRatio(this);
-    ratio->show();
+    res=new ShowRes(this);
+    res->show();
 }
 

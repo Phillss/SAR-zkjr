@@ -36,8 +36,61 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void select(const QModelIndex &index);
+//    QImage AdjustContrast(QImage Img, int iContrastValue);
+    QImage AdjustContrast(QImage Img, int iContrastValue)
+    {
+        int pixels = Img.width() * Img.height();
+        unsigned int *data = (unsigned int *)Img.bits();
+
+        int red, green, blue, nRed, nGreen, nBlue;
+
+        if (iContrastValue > 0 && iContrastValue < 100)
+        {
+            float param = 1 / (1 - iContrastValue / 100.0) - 1;
+
+            for (int i = 0; i < pixels; ++i)
+            {
+                nRed = qRed(data[i]);
+                nGreen = qGreen(data[i]);
+                nBlue = qBlue(data[i]);
+
+                red = nRed + (nRed - 127) * param;
+                red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
+                green = nGreen + (nGreen - 127) * param;
+                green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
+                blue = nBlue + (nBlue - 127) * param;
+                blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
+
+                data[i] = qRgba(red, green, blue, qAlpha(data[i]));
+            }
+        }
+        else
+        {
+            for (int i = 0; i < pixels; ++i)
+            {
+                nRed = qRed(data[i]);
+                nGreen = qGreen(data[i]);
+                nBlue = qBlue(data[i]);
+
+                red = nRed + (nRed - 127) * iContrastValue / 100.0;
+                red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
+                green = nGreen + (nGreen - 127) * iContrastValue / 100.0;
+                green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
+                blue = nBlue + (nBlue - 127) * iContrastValue / 100.0;
+                blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
+
+                data[i] = qRgba(red, green, blue, qAlpha(data[i]));
+            }
+        }
+
+        return Img;
+    }
+    void setContrast(int value);
     QStandardItemModel *model;
     QString homePath,loadpath,loadfilename;
+
+public slots:
+    void recieveValue(int value);
 
 private slots:
     void on_actiondaoru_triggered();
@@ -54,7 +107,8 @@ private slots:
 
     void on_actionduibi_triggered();
 
-private:
+
+protected:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
     QGraphicsView *view;
