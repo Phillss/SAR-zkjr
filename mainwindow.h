@@ -17,6 +17,8 @@
 #include "exportfile.h"
 #include "showres.h"
 #include <QMatrix>
+#include "conratio.h"
+#include "alert.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -46,6 +48,12 @@ private slots:
 
     void on_actiontuxiang_triggered();
 
+    void on_actiontuxiang_2_triggered();
+
+    void on_action_2_triggered();
+
+    void on_actionduibi_triggered();
+
 private:
     Ui::MainWindow *ui;
     QGraphicsScene *scene;
@@ -59,5 +67,8 @@ private:
     QByteArray NUL;
     int re;
     QString t;
+    QImage mirrored,pre;
+    ConRatio *ratio;
+    Alert *alertDia;
 };
 #endif // MAINWINDOW_H

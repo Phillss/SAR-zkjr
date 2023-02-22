@@ -9,6 +9,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    alert.cpp \
+    conratio.cpp \
     exportfile.cpp \
     image_scaled_widget.cpp \
     main.cpp \
@@ -16,12 +18,16 @@ SOURCES += \
     showres.cpp
 
 HEADERS += \
+    alert.h \
+    conratio.h \
     exportfile.h \
     image_scaled_widget.h \
     mainwindow.h \
     showres.h
 
 FORMS += \
+    alert.ui \
+    conratio.ui \
     exportfile.ui \
     mainwindow.ui \
     showres.ui

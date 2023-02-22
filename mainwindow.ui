@@ -66,6 +66,9 @@
        <property name="bottomMargin">
         <number>0</number>
        </property>
+       <item>
+        <widget class="QGraphicsView" name="graphicsView"/>
+       </item>
       </layout>
      </widget>
     </item>
@@ -120,6 +123,7 @@
     <addaction name="actionduibi"/>
     <addaction name="actiontuxiang"/>
     <addaction name="actiontuxiang_2"/>
+    <addaction name="action_2"/>
    </widget>
    <widget class="QMenu" name="menu">
     <property name="title">
@@ -153,17 +157,22 @@
   </action>
   <action name="actiontuxiang">
    <property name="text">
-    <string>图像旋转</string>
+    <string>图像顺时针旋转</string>
    </property>
   </action>
   <action name="actiontuxiang_2">
    <property name="text">
-    <string>图像翻转</string>
+    <string>图像水平翻转</string>
    </property>
   </action>
   <action name="action">
    <property name="text">
     <string>处理结果</string>
+   </property>
+  </action>
+  <action name="action_2">
+   <property name="text">
+    <string>图形垂直翻转</string>
    </property>
   </action>
  </widget>
