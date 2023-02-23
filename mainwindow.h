@@ -19,6 +19,9 @@
 #include <QMatrix>
 #include "conratio.h"
 #include "alert.h"
+#include <QtXml>
+#include <QDomDocument>
+#include "threshold.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -36,7 +39,8 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
     void select(const QModelIndex &index);
-//    QImage AdjustContrast(QImage Img, int iContrastValue);
+    void algori_select(const QModelIndex &index);
+    void loadXML(QString xmlpath);
     QImage AdjustContrast(QImage Img, int iContrastValue)
     {
         int pixels = Img.width() * Img.height();
@@ -86,8 +90,11 @@ public:
         return Img;
     }
     void setContrast(int value);
-    QStandardItemModel *model;
+    QStandardItemModel *model,*algorithmmodel;
     QString homePath,loadpath,loadfilename;
+
+signals:
+    void sendToExport(QStandardItemModel *model);
 
 public slots:
     void recieveValue(int value);
@@ -106,6 +113,8 @@ private slots:
     void on_action_2_triggered();
 
     void on_actionduibi_triggered();
+    void listDom(QDomElement& docElem);
+
 
 
 protected:
@@ -124,5 +133,8 @@ protected:
     QImage mirrored,pre;
     ConRatio *ratio;
     Alert *alertDia;
+    QStringList algorithmHeader;
+    threshold *holder;
+
 };
 #endif // MAINWINDOW_H

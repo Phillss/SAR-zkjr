@@ -92,7 +92,11 @@
         </widget>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView_2"/>
+        <widget class="QTreeView" name="treeView_2">
+         <property name="editTriggers">
+          <set>QAbstractItemView::NoEditTriggers</set>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>

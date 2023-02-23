@@ -7,7 +7,10 @@ Alert::Alert(QWidget *parent) :
 {
     ui->setupUi(this);
     setWindowTitle("提示");
-    ui->alertMessage->toPlainText();
+
+}
+void Alert::setMessage(QString message){
+    ui->alertMessage->setPlainText(message);
 }
 
 Alert::~Alert()

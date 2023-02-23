@@ -14,7 +14,7 @@ class Alert : public QDialog
 public:
     explicit Alert(QWidget *parent = nullptr);
     ~Alert();
-    void setTest(QString s);
+    void setMessage(QString s);
 
 private:
     Ui::Alert *ui;

@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,7 +15,8 @@ SOURCES += \
     image_scaled_widget.cpp \
     main.cpp \
     mainwindow.cpp \
-    showres.cpp
+    showres.cpp \
+    threshold.cpp
 
 HEADERS += \
     alert.h \
@@ -23,14 +24,16 @@ HEADERS += \
     exportfile.h \
     image_scaled_widget.h \
     mainwindow.h \
-    showres.h
+    showres.h \
+    threshold.h
 
 FORMS += \
     alert.ui \
     conratio.ui \
     exportfile.ui \
     mainwindow.ui \
-    showres.ui
+    showres.ui \
+    threshold.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

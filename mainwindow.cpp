@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     if(remove.exists()){
         remove.removeRecursively();
     }
-
+    loadXML(loadpath+"/ini.xml");
+//ini window
 //    QElapsedTimer t;
 //    t.start();
 //    while(t.elapsed()<2500)
@@ -40,8 +41,13 @@ MainWindow::MainWindow(QWidget *parent)
     view=ui->graphicsView;
     view->setParent(ui->center_widget);
     alertDia=new Alert();
-//    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
+
+    ef=new ExportFile(this);
+    connect(this,&MainWindow::sendToExport,ef,&ExportFile::recieveFromMain);
+    ratio=new ConRatio(this);
+    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
 }
+//文件选取
 void MainWindow::select(const QModelIndex &index){
     scene->clear();
     QVariant v=index.data();
@@ -57,6 +63,12 @@ void MainWindow::select(const QModelIndex &index){
     onclicked=temp;
     currentPix=pix;
 }
+//算法选取
+void MainWindow::algori_select(const QModelIndex &index){
+    holder=new threshold();
+    holder->show();
+}
+
 MainWindow::~MainWindow()
 {
     delete ui;
@@ -80,7 +92,7 @@ void MainWindow::on_actiondaoru_triggered()
         if(!QFile::exists(loadfilename+"/"+filefull)){
             QFile::copy(str_path,loadfilename+"/"+filefull);
         }
-        QStandardItem *item=new QStandardItem(fileinfor.baseName());
+        QStandardItem *item=new QStandardItem(filefull);
         int currrowcount=model->rowCount();
         model->setItem(currrowcount,0,item);
     }
@@ -89,28 +101,39 @@ void MainWindow::on_actiondaoru_triggered()
 //文件导出窗口
 void MainWindow::on_actiondaochu_triggered()
 {
-    ef=new ExportFile(this);
+
+    emit sendToExport(model);
+    QModelIndex in=model->index(0,0);
+    if(in.isValid()){
+        for(int curIndex=0;curIndex<model->rowCount(in);++curIndex){
+            qDebug()<<"dsfs";
+            QModelIndex si=model->index(curIndex,0,in);
+            QStandardItem *curItem=model->itemFromIndex(si);
+            if(curIndex){
+                QString curItemName=curItem->text();
+                qDebug()<<curItemName;
+            }
+        }
+    }
     ef->show();
 }
 
 //对比度调节窗口
 void MainWindow::on_actionduibi_triggered()
 {
-    ratio=new ConRatio(this);
-    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
+//    ratio=new ConRatio(this);
+//    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
     ratio->show();
 }
-//
+//对比度调节
 void MainWindow::recieveValue(int value){
     scene->clear();
     if(onclicked!=NULL){
         if(t==onclicked){
             mirrored=MainWindow::AdjustContrast(pre,value);
-            qDebug()<<"==";
         }else{
             QImage img(onclicked);
             mirrored=AdjustContrast(img,value);
-            qDebug()<<"!=";
         }
         pre=mirrored;
         QPixmap mp=QPixmap::fromImage(mirrored);
@@ -191,57 +214,6 @@ void MainWindow::on_action_2_triggered()
     t=onclicked;
 }
 
-
-//图片对比度调节
-//QImage AdjustContrast(QImage Img, int iContrastValue)
-//{
-//    int pixels = Img.width() * Img.height();
-//    unsigned int *data = (unsigned int *)Img.bits();
-
-//    int red, green, blue, nRed, nGreen, nBlue;
-
-//    if (iContrastValue > 0 && iContrastValue < 100)
-//    {
-//        float param = 1 / (1 - iContrastValue / 100.0) - 1;
-
-//        for (int i = 0; i < pixels; ++i)
-//        {
-//            nRed = qRed(data[i]);
-//            nGreen = qGreen(data[i]);
-//            nBlue = qBlue(data[i]);
-
-//            red = nRed + (nRed - 127) * param;
-//            red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
-//            green = nGreen + (nGreen - 127) * param;
-//            green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
-//            blue = nBlue + (nBlue - 127) * param;
-//            blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
-
-//            data[i] = qRgba(red, green, blue, qAlpha(data[i]));
-//        }
-//    }
-//    else
-//    {
-//        for (int i = 0; i < pixels; ++i)
-//        {
-//            nRed = qRed(data[i]);
-//            nGreen = qGreen(data[i]);
-//            nBlue = qBlue(data[i]);
-
-//            red = nRed + (nRed - 127) * iContrastValue / 100.0;
-//            red = (red < 0x00) ? 0x00 : (red > 0xff) ? 0xff : red;
-//            green = nGreen + (nGreen - 127) * iContrastValue / 100.0;
-//            green = (green < 0x00) ? 0x00 : (green > 0xff) ? 0xff : green;
-//            blue = nBlue + (nBlue - 127) * iContrastValue / 100.0;
-//            blue = (blue < 0x00) ? 0x00 : (blue > 0xff) ? 0xff : blue;
-
-//            data[i] = qRgba(red, green, blue, qAlpha(data[i]));
-//        }
-//    }
-
-//    return Img;
-//}
-
 //显示处理结果窗口
 void MainWindow::on_action_triggered()
 {
@@ -249,3 +221,64 @@ void MainWindow::on_action_triggered()
     res->show();
 }
 
+void MainWindow::loadXML(QString xmlpath){
+    algorithmmodel=new QStandardItemModel(ui->treeView_2);
+    ui->treeView_2->setModel(algorithmmodel);
+    algorithmHeader.append("SAR目标检测算法");
+    algorithmmodel->setHorizontalHeaderLabels(algorithmHeader);
+    connect(ui->treeView_2,&QTreeView::clicked,this,&MainWindow::algori_select);
+    QDomDocument doc;
+    QFile file(xmlpath);
+    if (xmlpath.isEmpty()||!file.open(QIODevice::ReadOnly)){
+        alertDia->setMessage("初始化失败！");
+        return;
+    }
+    if (!doc.setContent(&file))
+    {
+        alertDia->setMessage("初始化失败！");
+        file.close();
+        return;
+    }
+    file.close();
+    if(doc.setContent(&file)){
+        QDomElement docelement=doc.documentElement();
+        listDom(docelement);
+    }
+}
+void MainWindow::listDom(QDomElement& docElem)
+{
+    QDomNode node = docElem.firstChild();
+    QDomNode algorithmsNode;
+    QString tagename;
+    if(node.toElement().isNull()){
+        return;
+    }
+    while(!node.isNull()){
+        node.toElement().tagName();
+        tagename=node.toElement().tagName();
+        if(tagename=="algorithmlist"){
+            algorithmsNode=node.toElement().firstChild();
+            while(!algorithmsNode.isNull()){
+                QString name=algorithmsNode.toElement().firstChild().toElement().text();
+                QStandardItem *algori_item=new QStandardItem(name);
+                int algori_count=algorithmmodel->rowCount();
+                algorithmmodel->setItem(algori_count,0,algori_item);
+                algorithmsNode=algorithmsNode.nextSibling();
+            }
+        }
+        node=node.nextSibling();
+    }
+
+//    if(docElem.tagName()=="algorithm-name"&&node.toElement().isNull()){
+//        qDebug()<<docElem.text();
+//    }
+//    while(!node.isNull()){
+//        QDomElement element=node.toElement();
+//        if(!element.isNull()){
+//            listDom(element);
+//        }
+//        node=node.nextSibling();
+//    }
+//    return;
+
+}
