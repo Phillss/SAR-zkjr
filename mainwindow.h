@@ -22,6 +22,8 @@
 #include <QtXml>
 #include <QDomDocument>
 #include "threshold.h"
+#include <QHash>
+#include "algom.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -114,11 +116,11 @@ private slots:
 
     void on_actionduibi_triggered();
     void listDom(QDomElement& docElem);
-
-
+    void listAlgorihm(QDomNode& algorithmNodes);
 
 protected:
     Ui::MainWindow *ui;
+    QString onStartPic,onStartHeader,mainWindowHeader,algorithmpath;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QPointF lastpoint;
@@ -135,6 +137,7 @@ protected:
     Alert *alertDia;
     QStringList algorithmHeader;
     threshold *holder;
+    QHash <int,Algom> hash;
 
 };
 #endif // MAINWINDOW_H

@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     alert.cpp \
+    algom.cpp \
     conratio.cpp \
     exportfile.cpp \
     image_scaled_widget.cpp \
@@ -20,6 +21,7 @@ SOURCES += \
 
 HEADERS += \
     alert.h \
+    algom.h \
     conratio.h \
     exportfile.h \
     image_scaled_widget.h \

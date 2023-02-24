@@ -10,7 +10,7 @@ Alert::Alert(QWidget *parent) :
 
 }
 void Alert::setMessage(QString message){
-    ui->alertMessage->setPlainText(message);
+    ui->label->setText(message);
 }
 
 Alert::~Alert()

@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QStandardItemModel>
 #include <qdebug.h>
+#include <QPushButton>
+#include "alert.h"
 
 namespace Ui {
 class ExportFile;
@@ -17,7 +19,9 @@ public:
     explicit ExportFile(QWidget *parent = nullptr);
     ~ExportFile();
     QStandardItemModel *exmodel;
-
+    void exportFiles(QStandardItemModel *model);
+signals:
+    void exsign(QStandardItemModel* item);
 public slots:
     void recieveFromMain(QStandardItemModel *model);
 private slots:
@@ -25,6 +29,7 @@ private slots:
 
 private:
     Ui::ExportFile *ui;
+    Alert *alert;
 };
 
 #endif // EXPORTFILE_H
