@@ -1,5 +1,6 @@
 #include "threshold.h"
 #include "ui_threshold.h"
+#include <QDebug>
 
 threshold::threshold(QWidget *parent) :
     QDialog(parent),
@@ -14,6 +15,24 @@ threshold::threshold(QWidget *parent) :
     ui->height->setValidator(new QIntValidator(0,max_height,this));
     ui->width->setValidator(new QIntValidator(0,max_width,this));
     ui->horizontalSlider->setValue(default_t);
+}
+void threshold::setMaxt(int t){
+    this->max_t=t;
+}
+void threshold::setMint(int t){
+    this->min_t=t;
+}
+void threshold::setDefault(int t){
+    this->default_t=t;
+}
+void threshold::setMaxH(int h){
+    this->max_height=h;
+}
+void threshold::setMaxW(int h){
+    this->max_width=h;
+}
+void threshold::setFalg(bool flag){
+    this->flag=flag;
     ui->widget_2->setVisible(flag);
 }
 

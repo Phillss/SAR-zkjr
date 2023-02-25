@@ -16,14 +16,15 @@ public:
     int getWinhei();
     int getWinwid();
     bool getFlag();
-//    void setNamecn(QString name);
-//    void setNamepy(QString name);
-//    void setDefaultt(int t);
-//    void setmint(int t);
-//    void setmaxt(int t);
-//    void setWinhei(int h);
-//    void setWinwid(int w);
-//    void setFlag(bool flag);
+    void setNamecn(QString name);
+    void setNamepy(QString name);
+    void setDefaultt(int t);
+    void setmint(int t);
+    void setmaxt(int t);
+    void setWinhei(int h);
+    void setWinwid(int w);
+    void setFlag(bool flag);
+    QString tostring();
 private:
     QString name_cn,name_py;
     int default_t,min_t,max_t;

@@ -14,6 +14,12 @@ class threshold : public QDialog
 public:
     explicit threshold(QWidget *parent = nullptr);
     ~threshold();
+    void setMaxt(int t);
+    void setMint(int t);
+    void setDefault(int t);
+    void setMaxH(int h);
+    void setMaxW(int w);
+    void setFalg(bool flag);
 
 private:
     Ui::threshold *ui;

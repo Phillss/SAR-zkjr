@@ -18,7 +18,7 @@
             <algorithm-name>灰度直方图特征法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>1</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
@@ -27,20 +27,20 @@
             <algorithm-name>基于滑窗的能量特征目标检测方法1</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>2</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
             <window_size>
-                <height></height>
-                <width></width>
+                <height>1</height>
+                <width>1</width>
             </window_size>
         </algorithm>
         <algorithm>
             <algorithm-name>基于矩形纹理特征目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>3</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -49,7 +49,7 @@
             <algorithm-name>基于滑窗的能量特性检测方法2</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>4</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
@@ -62,7 +62,7 @@
             <algorithm-name>基于纹理的SAR图像目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>5</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -71,7 +71,7 @@
             <algorithm-name>基于信噪比的SAR图像目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>6</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -80,7 +80,7 @@
             <algorithm-name>基于圆形纹理特征目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>7</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>

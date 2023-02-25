@@ -137,7 +137,7 @@ protected:
     Alert *alertDia;
     QStringList algorithmHeader;
     threshold *holder;
-    QHash <int,Algom> hash;
+    QHash <int,Algom*> hash;
 
 };
 #endif // MAINWINDOW_H

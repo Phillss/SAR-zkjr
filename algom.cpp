@@ -44,3 +44,30 @@ int Algom::getWinwid(){
 bool Algom::getFlag(){
     return flag;
 }
+void Algom::setNamecn(QString name){
+    this->name_cn=name;
+}
+void Algom::setNamepy(QString name){
+    this->name_py=name;
+}
+void Algom::setDefaultt(int t){
+    this->min_t=t;
+}
+void Algom::setmint(int t){
+    this->min_t=t;
+}
+void Algom::setmaxt(int t){
+    this->max_t=t;
+}
+void Algom::setWinhei(int h){
+    this->win_hei=h;
+}
+void Algom::setWinwid(int w){
+    this->win_wid=w;
+}
+void Algom::setFlag(bool flag){
+    this->flag=flag;
+}
+QString Algom::tostring(){
+    return name_cn+":"+name_py+":"+QString::number(min_t)+":"+QString::number(max_t)+":"+QString::number(win_hei)+":"+QString::number(win_wid);
+}

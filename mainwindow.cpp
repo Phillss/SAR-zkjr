@@ -87,6 +87,7 @@ void MainWindow::select(const QModelIndex &index){
 //算法选取
 void MainWindow::algori_select(const QModelIndex &index){
     holder=new threshold();
+    holder->setFalg(hash.value(index.row())->getFlag());
     holder->show();
 }
 
@@ -281,26 +282,55 @@ void MainWindow::listDom(QDomElement& docElem)
 }
 //解析配置文件中算法列表
 void MainWindow::listAlgorihm(QDomNode& algorithmNodes){
-    QDomNode algorithmsNode,propertyNode;
-    QString tagname;
-    algorithmsNode=algorithmNodes.toElement().firstChild();
+    QDomNode algorithmsNode,propertyNode,thresholdNode,window;
+    QString tagname,thresholdname;
+    algorithmsNode=algorithmNodes.toElement().firstChild();//algorithm
+    int index=0;
     while(!algorithmsNode.isNull()){//遍历每个算法
         QString name=algorithmsNode.toElement().firstChild().toElement().text();
-        propertyNode=algorithmNodes.toElement().firstChild();
+//        qDebug()<<name;
+        propertyNode=algorithmsNode.toElement().firstChild();
+//        qDebug()<<propertyNode.toElement().text();
         Algom *algo=new Algom();
         while(!propertyNode.isNull()){//解析每个算法的属性
             tagname=propertyNode.toElement().tagName();
+//            qDebug()<<tagname;
             if(tagname=="algorithm-name"){
-
+                algo->setNamecn(propertyNode.toElement().text());
+//                qDebug()<<propertyNode.toElement().text();
             }else if(tagname=="algorithm-local"){
-
+                algo->setNamepy(propertyNode.toElement().text());
             }else if(tagname=="algorithm-threshold"){
-
+                thresholdNode=propertyNode.toElement().firstChild();
+                while(!thresholdNode.isNull()){
+                    thresholdname=thresholdNode.toElement().tagName();
+                    if(thresholdname=="default"){
+                        algo->setDefaultt(thresholdNode.toElement().text().toInt());
+                    }else if(thresholdname=="min"){
+                        algo->setmint(thresholdNode.toElement().text().toInt());
+                    }else if(thresholdname=="max"){
+                        algo->setmaxt(thresholdNode.toElement().text().toInt());
+                    }
+                    thresholdNode=thresholdNode.nextSibling();
+                }
             }else if(tagname=="window_size"){
-
+                algo->setFlag(true);
+                window=propertyNode.toElement().firstChild();
+                while(!window.isNull()){
+                    if(window.toElement().tagName()=="height"){
+                        if(!window.toElement().text().isEmpty())
+                            algo->setWinwid(window.toElement().text().toInt());
+                    }else if(window.toElement().tagName()=="width"){
+                        if(!window.toElement().text().isEmpty())
+                            algo->setWinhei(window.toElement().text().toInt());
+                    }
+                    window=window.nextSibling();
+                }
             }
             propertyNode=propertyNode.nextSibling();
         }
+        hash.insert(index,algo);
+        index++;
         QStandardItem *algori_item=new QStandardItem(name);
         int algori_count=algorithmmodel->rowCount();
         algorithmmodel->setItem(algori_count,0,algori_item);
