@@ -5,13 +5,18 @@
 #include <QSplashScreen>
 #include <QFile>
 #include <QFileDialog>
+#include "loadfile.h"
 
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    QPixmap onstart(":/res/onstart01.png");
     QSplashScreen * splash=new QSplashScreen;
-    splash->showMessage(QStringLiteral("SAR图像地面站辅助判读系统"),Qt::AlignBottom|Qt::AlignCenter,Qt::gray);
+    LoadFile* load=new LoadFile();
+    QString iniFilePath=QCoreApplication::applicationDirPath()+"/ini.xml";
+    load->loadXML(iniFilePath);
+    QPixmap onstart(":/res/"+load->getOnstartpic());
+    QString name=load->getOnstartHeader();
+    splash->showMessage(name,Qt::AlignBottom|Qt::AlignCenter,Qt::gray);
     splash->setFont(QFont("microsoft yahei",30,QFont::Bold));
     splash->setPixmap(onstart);
     splash->show();

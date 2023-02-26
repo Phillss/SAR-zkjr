@@ -14,6 +14,7 @@ SOURCES += \
     conratio.cpp \
     exportfile.cpp \
     image_scaled_widget.cpp \
+    loadfile.cpp \
     main.cpp \
     mainwindow.cpp \
     showres.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     conratio.h \
     exportfile.h \
     image_scaled_widget.h \
+    loadfile.h \
     mainwindow.h \
     showres.h \
     threshold.h

@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent)
     int desk_height=rect.height();
     int pos_x=desk_width/6,pos_y=desk_height/5,adjust_wid=desk_width*2/3,adjust_hei=desk_height*2/3;
     setGeometry(pos_x,pos_y,adjust_wid,adjust_hei);
-    setWindowTitle("SAR图像地面站辅助判读系统");
+
     setMinimumSize(MIN_height,MIN_width);
     setMaximumSize(MAX_height,MAX_width);
     homePath=QDir::homePath();
@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent)
     if(remove.exists()){
         remove.removeRecursively();
     }
-    loadXML(loadpath+"/ini.xml");
+    loadXML(loadpath+"/ini.xml");//ini.xml
+    setWindowTitle(this->mainWindowHeader);
 //ini window
     QElapsedTimer t;
     t.start();
@@ -271,7 +272,7 @@ void MainWindow::listDom(QDomElement& docElem)
         }else if(tagname=="onstartheader"){
 
         }else if(tagname=="mainwindowheader"){
-
+            this->mainWindowHeader=node.toElement().text();
         }else if(tagname=="algorithmpath"){
 
         }else if(tagname=="algorithmlist"){
