@@ -62,20 +62,21 @@ void MainWindow::select(const QModelIndex &index){
     QString n=v.toString();
     QString temp=loadfilename+"/"+n;
     image_scaled_widget *ll=new image_scaled_widget();
-    QPixmap *pix=new QPixmap();
-    pix->load(temp);
-    ll->change_new_image(pix,NUL);
+    QPixmap pix(temp);
+    currImg=pix.toImage();
+    re=0;
+    ll->change_new_image(&pix,NUL);
     scene->addItem(ll);
     view->fitInView(ll,Qt::KeepAspectRatio);
     view->show();
     onclicked=temp;
     onclickedRow=index.row();
-    currentPix=pix;
 }
 //算法选取
 void MainWindow::algori_select(const QModelIndex &index){
     holder=new threshold();
-    Algom *al=hash.value(index.row());
+    int mapindex=nameToindex.value(index.data().toString());
+    Algom *al=hash.value(mapindex);
     holder->setDefault(al->getDefaultt());
     holder->setMint(al->getmint());
     holder->setMaxt(al->getmaxt());
@@ -84,9 +85,13 @@ void MainWindow::algori_select(const QModelIndex &index){
     holder->setAlgorithmName(al->getNamepy());
     holder->setAlgorithmCn(al->getNamecn());
     holder->setalgorithmpath(algorithmpath);
-    model->item(0,0)->rowCount();
-    holder->setDistname(QString::number(model->item(onclickedRow,0)->rowCount()+1));
-    holder->show();
+    if(onclickedRow==-1||onclickedRow>model->rowCount()){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
+    }else{
+        holder->setDistname(QString::number(model->item(onclickedRow,0)->rowCount()+1));
+        holder->show();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -132,97 +137,121 @@ void MainWindow::on_actionduibi_triggered()
 {
 //    ratio=new ConRatio(this);
 //    connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
-    ratio->show();
+    if(onclickedRow==-1){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
+    }else{
+        ratio->show();
+    }
 }
 //对比度调节
 void MainWindow::recieveValue(int value){
-    scene->clear();
-    if(onclicked!=NULL){
-        if(t==onclicked){
-            mirrored=MainWindow::AdjustContrast(pre,value);
-        }else{
-            QImage img(onclicked);
-            mirrored=AdjustContrast(img,value);
+    if(onclickedRow==-1){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
+    }else{
+        if(onclicked!=NULL){
+            scene->clear();
+            if(t==onclicked&&!currImg.isNull()){
+                currImg=AdjustContrast(currImg,value);
+            }else{
+                QImage img(onclicked);
+                currImg=AdjustContrast(img,value);
+            }
+//            pre=mirrored;
+            QPixmap mp=QPixmap::fromImage(currImg);
+            image_scaled_widget *ls=new image_scaled_widget();
+            ls->change_new_image(&mp,NUL);
+            scene->addItem(ls);
+            view->fitInView(ls,Qt::KeepAspectRatio);
+            view->show();
         }
-        pre=mirrored;
-        QPixmap mp=QPixmap::fromImage(mirrored);
-        image_scaled_widget *ls=new image_scaled_widget();
-        ls->change_new_image(&mp,NUL);
-        scene->addItem(ls);
-        view->fitInView(ls,Qt::KeepAspectRatio);
-        view->show();
+        t=onclicked;
     }
-    t=onclicked;
 }
 
 //图像旋转
 void MainWindow::on_actiontuxiang_triggered()
 {
-    scene->clear();
-    if(t!=NULL&&t==onclicked){
-        re=(re+90)%360;
+    if(onclickedRow==-1){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
     }else{
-        re=90;
+        scene->clear();
+        if(t!=NULL&&t==onclicked){
+            re=90;
+        }else{
+            re=90;
+            QImage im(onclicked);
+            currImg=im;
+        }
+        QMatrix matrix;
+        matrix.rotate(re);
+        if(!currImg.isNull()){
+            currentPix=QPixmap::fromImage(currImg);
+            QPixmap tt=currentPix.transformed(matrix,Qt::SmoothTransformation);
+            image_scaled_widget *ls=new image_scaled_widget();
+            ls->change_new_image(&tt,NUL);
+            scene->addItem(ls);
+            view->fitInView(ls,Qt::KeepAspectRatio);
+            view->show();
+            currImg=tt.toImage();
+        }
+        t=onclicked;
     }
-    QMatrix matrix;
-    matrix.rotate(re);
-    if(currentPix!=NULL){
-        QPixmap tt=currentPix->transformed(matrix,Qt::SmoothTransformation);
-        image_scaled_widget *ls=new image_scaled_widget();
-        ls->change_new_image(&tt,NUL);
-        scene->addItem(ls);
-        view->fitInView(ls,Qt::KeepAspectRatio);
-        view->show();
-    }else{
-
-    }
-    t=onclicked;
 }
 
 //水平翻转
 void MainWindow::on_actiontuxiang_2_triggered()
 {
-    scene->clear();
-    if(onclicked!=NULL){
-        if(t==onclicked){
-            mirrored=pre.mirrored(true,false);
-        }else{
-            QImage im(onclicked);
-            mirrored=im.mirrored(true,false);
+    if(onclickedRow==-1){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
+    }else{
+        scene->clear();
+        if(onclicked!=NULL){
+            if(t==onclicked&&!currImg.isNull()){
+                currImg=currImg.mirrored(true,false);
+            }else{
+                QImage im(onclicked);
+                currImg=im.mirrored(true,false);
+            }
+            QPixmap mp=QPixmap::fromImage(currImg);
+            image_scaled_widget *ls=new image_scaled_widget();
+            ls->change_new_image(&mp,NUL);
+            scene->addItem(ls);
+            view->fitInView(ls,Qt::KeepAspectRatio);
+            view->show();
         }
-        pre=mirrored;
-        QPixmap mp=QPixmap::fromImage(mirrored);
-        image_scaled_widget *ls=new image_scaled_widget();
-        ls->change_new_image(&mp,NUL);
-        scene->addItem(ls);
-        view->fitInView(ls,Qt::KeepAspectRatio);
-        view->show();
+        t=onclicked;
     }
-    t=onclicked;
 }
 
 //垂直翻转
 void MainWindow::on_action_2_triggered()
 {
-    scene->clear();
-    if(onclicked!=NULL){
-        if(t==onclicked){
-            mirrored=pre.mirrored(true,true);
-        }else{
-            QImage im(onclicked);
-            mirrored=im.mirrored(true,true);
+    if(onclickedRow==-1){
+        alertDia->setMessage("请导入图片!");
+        alertDia->show();
+    }else{
+        scene->clear();
+        if(onclicked!=NULL){
+            if(t==onclicked&&!currImg.isNull()){
+                currImg=currImg.mirrored(true,true);
+            }else{
+                QImage im(onclicked);
+                currImg=im.mirrored(true,true);
+            }
+            QPixmap mp=QPixmap::fromImage(currImg);
+            image_scaled_widget *ls=new image_scaled_widget();
+            ls->change_new_image(&mp,NUL);
+            scene->addItem(ls);
+            view->fitInView(ls,Qt::KeepAspectRatio);
+            view->show();
         }
-        pre=mirrored;
-        QPixmap mp=QPixmap::fromImage(mirrored);
-        image_scaled_widget *ls=new image_scaled_widget();
-        ls->change_new_image(&mp,NUL);
-        scene->addItem(ls);
-        view->fitInView(ls,Qt::KeepAspectRatio);
-        view->show();
+        t=onclicked;
     }
-    t=onclicked;
 }
-
 //显示处理结果窗口
 void MainWindow::on_action_triggered()
 {
@@ -331,24 +360,36 @@ void MainWindow::listAlgorihm(QDomNode& algorithmNodes){
             }
             propertyNode=propertyNode.nextSibling();
         }
-        hash.insert(index,algo);
-        index++;
-        QStandardItem *algori_item=new QStandardItem(name);
-        int algori_count=algorithmmodel->rowCount();
-        algorithmmodel->setItem(algori_count,0,algori_item);
-        algorithmsNode=algorithmsNode.nextSibling();
+        if(!nameToindex.contains(algo->getNamecn())){
+            hash.insert(index,algo);
+            nameToindex.insert(algo->getNamecn(),index);
+            index++;
+            QStandardItem *algori_item=new QStandardItem(name);
+            int algori_count=algorithmmodel->rowCount();
+            algorithmmodel->setItem(algori_count,0,algori_item);
+            algorithmsNode=algorithmsNode.nextSibling();
+        }
     }
 }
 //搜索算法
 void MainWindow::on_pushButton_clicked()
 {
     QString algoname=ui->lineEdit->text();
-    QStandardItemModel *searchModel=new QStandardItemModel(ui->treeView_2);
-    ui->treeView_2->setModel(searchModel);//设置数据模型
-    searchModel->setHorizontalHeaderLabels(QStringList()<<"搜索结果");
-    QStandardItem *search=new QStandardItem(algoname);
-    int search_count=searchModel->rowCount();
-    searchModel->setItem(search_count,0,search);
+    if(!algoname.isEmpty()){
+        QStandardItemModel *searchModel=new QStandardItemModel(ui->treeView_2);
+        ui->treeView_2->setModel(searchModel);//设置数据模型
+        searchModel->setHorizontalHeaderLabels(QStringList()<<"搜索结果");
+        if(nameToindex.contains(algoname)){//full match
+            QStandardItem *search=new QStandardItem(algoname);
+            int search_count=searchModel->rowCount();
+            searchModel->setItem(search_count,0,search);
+        }else{
+            alertDia->setMessage("搜索结果不存在!");
+            alertDia->show();
+            ui->lineEdit->setText("");
+            ui->treeView_2->setModel(algorithmmodel);//设置数据模型
+        }
+    }
 }
 
 

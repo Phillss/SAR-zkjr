@@ -135,19 +135,19 @@ protected:
     qreal scale=1;
     ExportFile *ef;
     ShowRes *res;
-    QString onclicked;
-    QPixmap *currentPix;
+    QString onclicked,t;//
+    QImage pre,currImg;//
+    QPixmap currentPix;
     QByteArray NUL;
     int re;
-    QString t;
-    QImage mirrored,pre;
     ConRatio *ratio;
     Alert *alertDia;
     QStringList algorithmHeader;
     threshold *holder;
     QDomElement docelement;
     QHash <int,Algom*> hash;
-    int onclickedRow;
+    QHash<QString,int> nameToindex;
+    int onclickedRow=-1;
 
 };
 #endif // MAINWINDOW_H
