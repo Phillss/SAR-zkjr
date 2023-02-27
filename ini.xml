@@ -1,22 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <SAR>
-    <onstartpic>load</onstartpic>
-    <onstartheader>header</onstartheader>
-    <mainwindowheader>SAR</mainwindowheader>
-    <algorithmpath></algorithmpath>
+    <onstartpic>onstart01.png</onstartpic>
+    <onstartheader>SAR图像地面站辅助判读系统</onstartheader>
+    <mainwindowheader>SAR图像地面站辅助判读系统</mainwindowheader>
+    <algorithmpath>algofiles</algorithmpath>
+    <filelistname>文件列表</filelistname>
+    <algorithmlistname>SAR目标检测算法</algorithmlistname>
     <algorithmlist>
         <algorithm>
             <algorithm-name>拉普拉斯滤波法</algorithm-name>
-            <algorithm-local></algorithm-local>
+            <algorithm-local>add_obj.py</algorithm-local>
             <algorithm-threshold>
-                <default>0</default>
+                <default>7</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
         </algorithm>
         <algorithm>
             <algorithm-name>灰度直方图特征法</algorithm-name>
-            <algorithm-local></algorithm-local>
+            <algorithm-local>data_augmentation_check.py</algorithm-local>
             <algorithm-threshold>
                 <default>1</default>
                 <min>0</min>
@@ -27,20 +29,20 @@
             <algorithm-name>基于滑窗的能量特征目标检测方法1</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>2</default>
+                <default>3</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
             <window_size>
-                <height>1</height>
-                <width>1</width>
+                <height></height>
+                <width></width>
             </window_size>
         </algorithm>
         <algorithm>
             <algorithm-name>基于矩形纹理特征目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>3</default>
+                <default>0</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -49,7 +51,7 @@
             <algorithm-name>基于滑窗的能量特性检测方法2</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>4</default>
+                <default>0</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
@@ -62,7 +64,7 @@
             <algorithm-name>基于纹理的SAR图像目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>5</default>
+                <default>0</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -71,7 +73,7 @@
             <algorithm-name>基于信噪比的SAR图像目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>6</default>
+                <default>0</default>
                 <min>0</min>
                 <max>255</max>
             </algorithm-threshold>
@@ -80,7 +82,7 @@
             <algorithm-name>基于圆形纹理特征目标检测方法</algorithm-name>
             <algorithm-local></algorithm-local>
             <algorithm-threshold>
-                <default>7</default>
+                <default>0</default>
                 <min>0</min>
                 <max>10</max>
             </algorithm-threshold>
