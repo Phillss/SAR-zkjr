@@ -28,14 +28,20 @@ MainWindow::MainWindow(QWidget *parent)
     }
     loadXML(loadpath+"/ini.xml");//ini.xml
     setWindowTitle(this->mainWindowHeader);
+    algorithmpath=loadpath+"/"+algorithmpath;
+
+    QDir loadAlgorithm(algorithmpath);
+    if(!loadAlgorithm.exists()){
+        loadAlgorithm.mkdir(algorithmpath);
+    }
 //ini window
     QElapsedTimer t;
     t.start();
-    while(t.elapsed()<1500)
+    while(t.elapsed()<500)
         QCoreApplication::processEvents();
     model=new QStandardItemModel(ui->treeView);
     ui->treeView->setModel(model);
-    model->setHorizontalHeaderLabels(QStringList()<<QStringLiteral("文件列表"));
+    model->setHorizontalHeaderLabels(QStringList()<<filelist);
     connect(ui->treeView,&QTreeView::clicked,this,&MainWindow::select);
     scene=new QGraphicsScene();
     ui->graphicsView->setScene(scene);
@@ -48,26 +54,6 @@ MainWindow::MainWindow(QWidget *parent)
     ratio=new ConRatio(this);
     connect(ratio,&ConRatio::withParaSignal,this,&MainWindow::recieveValue);//接收子窗口的调节数值
     //文件折叠效果设置
-    QString qss = "QTreeWidget::branch:has-siblings:!adjoins-item{ \
-            border-image:url(:/res/vline.png) 0;\
-                }\
-            QTreeWidget::branch:has-siblings:adjoins-item{\
-             border-image:url(:/res/branch-more.png) 0;\
-               }\
-                QTreeWidget::branch:!has-children:!has-siblings:adjoins-item{\
-             border-image:url(:/res/branch-end.png) 0;\
-            }\
-             QTreeWidget::branch:has-children:!has-siblings:closed,\
-             QTreeWidget::branch:closed:has-children:has-siblings{\
-            border-image:none;\
-            image:url(:/res/branch-closed.png);\
-            }\
-            QTreeWidget::branch:open:has-children:!has-siblings,\
-            QTreeWidget::branch:open:has-children:has-siblings{\
-            border-image:none;\
-            image:url(:/res/branch-open.png);\}";
-            ui->treeView->setStyleSheet(qss);
-            ui->treeView->setLineWidth(1);
 }
 //文件选取
 void MainWindow::select(const QModelIndex &index){
@@ -83,12 +69,23 @@ void MainWindow::select(const QModelIndex &index){
     view->fitInView(ll,Qt::KeepAspectRatio);
     view->show();
     onclicked=temp;
+    onclickedRow=index.row();
     currentPix=pix;
 }
 //算法选取
 void MainWindow::algori_select(const QModelIndex &index){
     holder=new threshold();
-    holder->setFalg(hash.value(index.row())->getFlag());
+    Algom *al=hash.value(index.row());
+    holder->setDefault(al->getDefaultt());
+    holder->setMint(al->getmint());
+    holder->setMaxt(al->getmaxt());
+    holder->setFalg(al->getFlag());
+    holder->setFilename(onclicked);
+    holder->setAlgorithmName(al->getNamepy());
+    holder->setAlgorithmCn(al->getNamecn());
+    holder->setalgorithmpath(algorithmpath);
+    model->item(0,0)->rowCount();
+    holder->setDistname(QString::number(model->item(onclickedRow,0)->rowCount()+1));
     holder->show();
 }
 
@@ -118,8 +115,8 @@ void MainWindow::on_actiondaoru_triggered()
         QStandardItem *item=new QStandardItem(filefull);
         int currrowcount=model->rowCount();
         model->setItem(currrowcount,0,item);
-        model->item(currrowcount,0)->setChild(0,0,new QStandardItem("算法处理结果1"));
-        model->item(currrowcount,0)->setChild(1,0,new QStandardItem("算法处理结果2"));
+//        model->item(currrowcount,0)->setChild(0,0,new QStandardItem("算法处理结果1"));
+//        model->item(currrowcount,0)->setChild(1,0,new QStandardItem("算法处理结果2"));
     }
 }
 
@@ -235,9 +232,7 @@ void MainWindow::on_action_triggered()
 //加载配置文件
 void MainWindow::loadXML(QString xmlpath){
     algorithmmodel=new QStandardItemModel(ui->treeView_2);
-    ui->treeView_2->setModel(algorithmmodel);
-    algorithmHeader.append("SAR目标检测算法");
-    algorithmmodel->setHorizontalHeaderLabels(algorithmHeader);
+    ui->treeView_2->setModel(algorithmmodel);//设置数据模型
     connect(ui->treeView_2,&QTreeView::clicked,this,&MainWindow::algori_select);
     QDomDocument doc;
     QFile file(xmlpath);
@@ -253,9 +248,11 @@ void MainWindow::loadXML(QString xmlpath){
     }
     file.close();
     if(doc.setContent(&file)){
-        QDomElement docelement=doc.documentElement();
+        docelement=doc.documentElement();
         listDom(docelement);
     }
+    algorithmHeader.append(algorithmlistname);
+    algorithmmodel->setHorizontalHeaderLabels(algorithmHeader);
 }
 //解析配置文件
 void MainWindow::listDom(QDomElement& docElem)
@@ -274,9 +271,13 @@ void MainWindow::listDom(QDomElement& docElem)
         }else if(tagname=="mainwindowheader"){
             this->mainWindowHeader=node.toElement().text();
         }else if(tagname=="algorithmpath"){
-
+            this->algorithmpath=node.toElement().text();
         }else if(tagname=="algorithmlist"){
             listAlgorihm(node);
+        }else if(tagname=="filelistname"){
+            this->filelist=node.toElement().text();
+        }else if(tagname=="algorithmlistname"){
+            this->algorithmlistname=node.toElement().text();
         }
         node=node.nextSibling();
     }
@@ -338,3 +339,29 @@ void MainWindow::listAlgorihm(QDomNode& algorithmNodes){
         algorithmsNode=algorithmsNode.nextSibling();
     }
 }
+//搜索算法
+void MainWindow::on_pushButton_clicked()
+{
+    QString algoname=ui->lineEdit->text();
+    QStandardItemModel *searchModel=new QStandardItemModel(ui->treeView_2);
+    ui->treeView_2->setModel(searchModel);//设置数据模型
+    searchModel->setHorizontalHeaderLabels(QStringList()<<"搜索结果");
+    QStandardItem *search=new QStandardItem(algoname);
+    int search_count=searchModel->rowCount();
+    searchModel->setItem(search_count,0,search);
+}
+
+
+void MainWindow::on_lineEdit_editingFinished()
+{
+
+}
+
+//显示全部算法
+void MainWindow::on_lineEdit_textEdited(const QString &arg1)
+{
+    if(arg1.isEmpty()){
+        ui->treeView_2->setModel(algorithmmodel);//设置数据模型
+    }
+}
+

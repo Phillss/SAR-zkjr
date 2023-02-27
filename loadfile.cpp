@@ -16,6 +16,12 @@ QString LoadFile::getMainwindow(){
 QString LoadFile::getAlgorithm(){
     return algorithmpath;
 }
+QString LoadFile::getlistname(){
+    return algorithmlistname;
+}
+QString LoadFile::getfilelist(){
+    return filelist;
+}
 void LoadFile::loadXML(QString xmlpath){
     QDomDocument doc;
     QFile file(xmlpath);
@@ -53,6 +59,10 @@ void LoadFile::listDom(QDomElement& docElem)
             this->mainwindowheader=node.toElement().text();
         }else if(tagname=="algorithmpath"){
             this->algorithmpath=node.toElement().text();
+        }else if(tagname=="algorithmlistname"){
+            this->algorithmlistname=node.toElement().text();
+        }else if(tagname=="filelistname"){
+            this->filelist=node.toElement().text();
         }
         node=node.nextSibling();
     }

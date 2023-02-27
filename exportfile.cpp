@@ -44,6 +44,5 @@ void ExportFile::on_buttonBox_accepted()
             qDebug()<<checkitem->text();
         }
     }
-
 }
 

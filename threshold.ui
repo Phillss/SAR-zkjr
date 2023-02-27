@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>131</height>
+    <height>197</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -26,13 +26,20 @@
       </item>
       <item>
        <widget class="QSlider" name="horizontalSlider">
+        <property name="maximum">
+         <number>255</number>
+        </property>
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QSpinBox" name="spinBox"/>
+       <widget class="QSpinBox" name="spinBox">
+        <property name="maximum">
+         <number>255</number>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -66,6 +73,22 @@
       </item>
       <item>
        <widget class="QLineEdit" name="width"/>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_3" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_3">
+      <item>
+       <widget class="QLineEdit" name="lineEdit"/>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>加载配置文件</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>

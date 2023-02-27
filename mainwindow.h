@@ -24,6 +24,7 @@
 #include "threshold.h"
 #include <QHash>
 #include "algom.h"
+#include <QProcess>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -94,6 +95,7 @@ public:
     void setContrast(int value);
     QStandardItemModel *model,*algorithmmodel;
     QString homePath,loadpath,loadfilename;
+    void onReadData();
 
 signals:
     void sendToExport(QStandardItemModel *model);
@@ -118,9 +120,15 @@ private slots:
     void listDom(QDomElement& docElem);
     void listAlgorihm(QDomNode& algorithmNodes);
 
+    void on_pushButton_clicked();
+
+    void on_lineEdit_editingFinished();
+
+    void on_lineEdit_textEdited(const QString &arg1);
+
 protected:
     Ui::MainWindow *ui;
-    QString onStartPic,onStartHeader,mainWindowHeader,algorithmpath;
+    QString onStartPic,onStartHeader,mainWindowHeader,algorithmpath,algorithmlistname,filelist;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QPointF lastpoint;
@@ -137,7 +145,9 @@ protected:
     Alert *alertDia;
     QStringList algorithmHeader;
     threshold *holder;
+    QDomElement docelement;
     QHash <int,Algom*> hash;
+    int onclickedRow;
 
 };
 #endif // MAINWINDOW_H

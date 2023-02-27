@@ -2,6 +2,10 @@
 #define THRESHOLD_H
 
 #include <QDialog>
+#include <QProcess>
+#include <QFile>
+#include <QFileDialog>
+#include <QStandardItemModel>
 
 namespace Ui {
 class threshold;
@@ -20,11 +24,25 @@ public:
     void setMaxH(int h);
     void setMaxW(int w);
     void setFalg(bool flag);
+    void setFilename(QString name);
+    void setalgorithmpath(QString name);
+    void setalgorithmDirName(QString name);
+    void setAlgorithmName(QString name);
+    void setDistname(QString name);
+    void setAlgorithmCn(QString name);
+
+private slots:
+
+    void on_buttonBox_accepted();
+
+    void on_pushButton_clicked();
 
 private:
     Ui::threshold *ui;
-    int max_t,min_t,default_t=5,max_height=10000,max_width=10000;
-    bool flag=true;
+    QString filename,processPath,algorithmpath,algorithmDirName,algorithmName,profileDir,distname,outputdir,algorithmnameCn;
+    int max_t,min_t,default_t,max_height=10000,max_width=10000;
+    bool flag;
+    QStandardItemModel *showModel;
 };
 
 #endif // THRESHOLD_H

@@ -19,10 +19,12 @@ public:
     QString getOnstartHeader();
     QString getMainwindow();
     QString getAlgorithm();
+    QString getlistname();
+    QString getfilelist();
 
 private:
     Alert *alertDia;
-    QString onstartpic,onstartheader,mainwindowheader,algorithmpath;
+    QString onstartpic,onstartheader,mainwindowheader,algorithmpath,algorithmlistname,filelist;
 };
 
 #endif // LOADFILE_H

@@ -51,7 +51,7 @@ void Algom::setNamepy(QString name){
     this->name_py=name;
 }
 void Algom::setDefaultt(int t){
-    this->min_t=t;
+    this->default_t=t;
 }
 void Algom::setmint(int t){
     this->min_t=t;
