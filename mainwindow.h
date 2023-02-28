@@ -125,10 +125,11 @@ private slots:
     void on_lineEdit_editingFinished();
 
     void on_lineEdit_textEdited(const QString &arg1);
+    void appendAlgorithmResult(QString distname);
 
 protected:
     Ui::MainWindow *ui;
-    QString onStartPic,onStartHeader,mainWindowHeader,algorithmpath,algorithmlistname,filelist;
+    QString onStartPic,onStartHeader,mainWindowHeader,algorithmpath,algorithmlistname,filelist,output;
     QGraphicsScene *scene;
     QGraphicsView *view;
     QPointF lastpoint;
@@ -148,6 +149,7 @@ protected:
     QHash <int,Algom*> hash;
     QHash<QString,int> nameToindex;
     int onclickedRow=-1;
+    QString nullmessage;
 
 };
 #endif // MAINWINDOW_H

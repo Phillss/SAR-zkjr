@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QStandardItemModel>
+#include "alert.h"
 
 namespace Ui {
 class threshold;
@@ -24,12 +25,15 @@ public:
     void setMaxH(int h);
     void setMaxW(int w);
     void setFalg(bool flag);
+    void setProfile(bool flag);
     void setFilename(QString name);
     void setalgorithmpath(QString name);
     void setalgorithmDirName(QString name);
     void setAlgorithmName(QString name);
     void setDistname(QString name);
     void setAlgorithmCn(QString name);
+signals:
+    void returnResult(QString distName,QString distpath);
 
 private slots:
 
@@ -41,8 +45,9 @@ private:
     Ui::threshold *ui;
     QString filename,processPath,algorithmpath,algorithmDirName,algorithmName,profileDir,distname,outputdir,algorithmnameCn;
     int max_t,min_t,default_t,max_height=10000,max_width=10000;
-    bool flag;
+    bool flag,profileflag;
     QStandardItemModel *showModel;
+    Alert *alert;
 };
 
 #endif // THRESHOLD_H

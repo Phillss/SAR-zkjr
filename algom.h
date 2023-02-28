@@ -16,6 +16,7 @@ public:
     int getWinhei();
     int getWinwid();
     bool getFlag();
+    bool getProfileFlag();
     void setNamecn(QString name);
     void setNamepy(QString name);
     void setDefaultt(int t);
@@ -24,12 +25,13 @@ public:
     void setWinhei(int h);
     void setWinwid(int w);
     void setFlag(bool flag);
+    void setProfileFlag(bool flag);
     QString tostring();
 private:
     QString name_cn,name_py;
     int default_t,min_t,max_t;
     int win_hei,win_wid;
-    bool flag;
+    bool flag=false,profileFlag=false;
 };
 
 #endif // ALGOM_H

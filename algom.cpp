@@ -2,7 +2,7 @@
 
 Algom::Algom()
 {
-
+    this->name_cn="【名称加载失败！】";
 }
 Algom::Algom(QString name_cn,QString name_py,int default_t,int min_t,int max_t){
     this->name_cn=name_cn;
@@ -44,6 +44,9 @@ int Algom::getWinwid(){
 bool Algom::getFlag(){
     return flag;
 }
+bool Algom::getProfileFlag(){
+    return profileFlag;
+}
 void Algom::setNamecn(QString name){
     this->name_cn=name;
 }
@@ -67,6 +70,9 @@ void Algom::setWinwid(int w){
 }
 void Algom::setFlag(bool flag){
     this->flag=flag;
+}
+void Algom::setProfileFlag(bool flag){
+    this->profileFlag=flag;
 }
 QString Algom::tostring(){
     return name_cn+":"+name_py+":"+QString::number(min_t)+":"+QString::number(max_t)+":"+QString::number(win_hei)+":"+QString::number(win_wid);

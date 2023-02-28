@@ -16,6 +16,7 @@ threshold::threshold(QWidget *parent) :
     ui->width->setValidator(new QIntValidator(0,max_width,this));
     processPath=QCoreApplication::applicationDirPath();
     outputdir=processPath+"/LDfile/";
+    alert=new Alert();
 }
 void threshold::setMaxt(int t){
     this->max_t=t;
@@ -38,6 +39,10 @@ void threshold::setMaxW(int h){
 void threshold::setFalg(bool flag){
     this->flag=flag;
     ui->widget_2->setVisible(flag);
+}
+void threshold::setProfile(bool flag){
+    this->profileflag=flag;
+    ui->widget_3->setVisible(profileflag);
 }
 void threshold::setFilename(QString name){
     this->filename=name;
@@ -69,19 +74,21 @@ void threshold::on_buttonBox_accepted()
     QString arg2=filename;//图片文件的全路径
     QString arg3=QFileInfo(filename).baseName();//图片文件的裸称
     QString arg4=profileDir+"/";//配置文件所在文件夹
-    QString arg5=outputdir+algorithmnameCn+distname+"-";//文件输出全路径
-//    QString cmd="python3 "+algorithmpath+"/"+algorithmName+" "+filename+" "+QFileInfo(filename).baseName()+" "+profileDir+"/ "+outputdir+algorithmName+distname;
-//    qDebug()<<arg1;
-//    qDebug()<<arg2;
-//    qDebug()<<arg3;
-//    qDebug()<<arg4;
-//    qDebug()<<arg5;
+    QString arg5=outputdir+algorithmnameCn+distname;//文件输出全路径
     QString cmd="python3 "+arg1+" "+arg2+" "+arg3+" "+arg4+" "+arg5;
-    qDebug()<<cmd;
-    if(!profileDir.isEmpty()){
+    if(profileflag&&profileDir.isEmpty()){
+        alert->setMessage("请选择配置文件！");
+    }else{
         p1->start(cmd);
-//        qDebug()<<QString::fromLocal8Bit(p1->readAllStandardOutput().data());
+        emit returnResult(algorithmnameCn+distname,arg5);
+        QString output=p1->readAll();
+        if(output==""){
+            alert->setMessage("调节成功！");
+        }else{
+            alert->setMessage(output);
+        }
     }
+    alert->show();
 }
 
 //加载配置文件

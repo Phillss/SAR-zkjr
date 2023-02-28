@@ -6,6 +6,8 @@
 #include <qdebug.h>
 #include <QPushButton>
 #include "alert.h"
+#include <QFile>
+#include <QFileDialog>
 
 namespace Ui {
 class ExportFile;
@@ -30,6 +32,8 @@ private slots:
 private:
     Ui::ExportFile *ui;
     Alert *alert;
+    QList<QString> exFiles;
+    QString output;
 };
 
 #endif // EXPORTFILE_H

@@ -38,7 +38,7 @@ def write_xml(target_info, position_x, position_y, xmlname):
         ymax.text = str(position_y[k] + int(target[1][1]))
 
     tree = ET.ElementTree(root)
-    tree.write(xmlname+".xml", encoding='utf-8', xml_declaration=True)
+    tree.write(dist+"_"+xmlname+".xml", encoding='utf-8', xml_declaration=True)
 
 
 def read_xml(path):
@@ -173,7 +173,7 @@ def map_target(image_array, background_objects, imgname, background):
         # img_blur = cv2.medianBlur(image, 5)  # 中值滤波
         lenX, lenY = image.shape
         background[position_x[k]:position_x[k]+lenX, position_y[k]:position_y[k]+lenY] = img_blur
-    imageio.imsave(dist+imgname+".jpg", background)
+    imageio.imsave(dist+"_"+imgname+".jpg", background)
     # plt.figure(3)
     # plt.imshow(background, cmap=plt.cm.gray)
     # plt.show()

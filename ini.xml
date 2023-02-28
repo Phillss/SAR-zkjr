@@ -10,6 +10,7 @@
         <algorithm>
             <algorithm-name>拉普拉斯滤波法</algorithm-name>
             <algorithm-local>add_obj.py</algorithm-local>
+            <profile>true</profile>
             <algorithm-threshold>
                 <default>7</default>
                 <min>0</min>
