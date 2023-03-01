@@ -80,6 +80,7 @@ void threshold::on_buttonBox_accepted()
         alert->setMessage("请选择配置文件！");
     }else{
         p1->start(cmd);
+        p1->waitForFinished();
         emit returnResult(algorithmnameCn+distname,arg5);
         QString output=p1->readAll();
         if(output==""){

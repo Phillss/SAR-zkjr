@@ -150,6 +150,7 @@ protected:
     QHash<QString,int> nameToindex;
     int onclickedRow=-1;
     QString nullmessage;
+    QString suff;
 
 };
 #endif // MAINWINDOW_H

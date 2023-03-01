@@ -24,7 +24,13 @@ void ExportFile::recieveFromMain(QStandardItemModel *model){
         for(int curIndex=0;curIndex<model->rowCount();curIndex++){
             QModelIndex si=model->index(curIndex,0);
             QStandardItem *curItem=model->itemFromIndex(si);
-            QString curItemName=curItem->text();
+            QString childname;
+            if(curItem->hasChildren()){
+//                QStandardItem *childitem= curItem->child(0,0);
+                int childRows=curItem->rowCount();
+                childname="_"+curItem->child(childRows-1,0)->text();
+            }
+            QString curItemName=curItem->text()+childname;
             QStandardItem *items=new QStandardItem(curItemName);
             items->setCheckable(true);
             exmodel->setItem(curIndex,0,items);
@@ -53,9 +59,13 @@ void ExportFile::on_buttonBox_accepted()
         alert->show();
     }else{
         QString distpath=QFileDialog::getExistingDirectory();
-        qDebug()<<distpath;
+        QString temp;
         for(int i=0;i<exFiles.count();i++){
-            qDebug()<<exFiles[i];
+            QStringList list=exFiles[i].split('_');
+            if(list.size()>1){
+                temp=list[1];
+                qDebug()<<distpath+"/";
+            }
         }
     }
 }

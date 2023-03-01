@@ -63,10 +63,18 @@ void MainWindow::select(const QModelIndex &index){
     scene->clear();
     QModelIndex pindex=index.parent();
     if(pindex.isValid()){
-        qDebug()<<"子结点";
+        suff=QFileInfo(pindex.data().toString()).suffix();
         QVariant childv=index.data();
         QString childname=childv.toString();
         QString childtemp=loadfilename+"/"+childname;
+        if(QFile(childtemp+"_0."+suff).exists()){
+            childtemp+="_0."+suff;
+        }else if(QFile(childtemp+"_."+suff).exists()){
+            childtemp+="_."+suff;
+        }else{
+            alertDia->setMessage("文件输出路径不匹配！");
+            alertDia->show();
+        }
         image_scaled_widget *cl=new image_scaled_widget();
         QPixmap cpix(childtemp);
         currImg=QImage(childtemp);
@@ -78,6 +86,7 @@ void MainWindow::select(const QModelIndex &index){
         onclicked=childtemp;
         onclickedRow=index.row();
     }else{
+        suff=QFileInfo(index.data().toString()).suffix();
         QVariant v=index.data();
         QString n=v.toString();
         QString temp=loadfilename+"/"+n;
@@ -130,6 +139,25 @@ void MainWindow::appendAlgorithmResult(QString distname){
         int childRows=model->item(onclickedRow,0)->rowCount();
         model->item(onclickedRow,0)->setChild(childRows,0,new QStandardItem(distname));
 //        model->item(onclickedRow,0)->child(childRows,0)--;
+        QString showpic=loadfilename+"/"+distname;
+        if(QFile(showpic+"_0."+suff).exists()){
+            showpic+="_0."+suff;
+        }else if(QFile(showpic+"_."+suff).exists()){
+            showpic+="_."+suff;
+        }else{
+            alertDia->setMessage("文件输出路径不匹配！");
+            alertDia->show();
+        }
+        image_scaled_widget *showon=new image_scaled_widget();
+        QPixmap cpix(showpic);
+        currImg=QImage(showpic);
+        re=0;
+        showon->change_new_image(&cpix,NUL);
+        scene->addItem(showon);
+        view->fitInView(showon,Qt::KeepAspectRatio);
+        view->show();
+        onclicked=showpic;
+        onclickedRow=childRows;
     }
 }
 
