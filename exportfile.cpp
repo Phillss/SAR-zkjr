@@ -12,7 +12,7 @@ ExportFile::ExportFile(QWidget *parent) :
     exmodel=new QStandardItemModel(ui->treeView);
     ui->treeView->setModel(exmodel);
     exmodel->setHorizontalHeaderLabels(QStringList()<<QStringLiteral("文件列表"));
-    output=QCoreApplication::applicationDirPath()+"/LDfile/";
+    input=QCoreApplication::applicationDirPath()+"/LDfile/";
 }
 void ExportFile::recieveFromMain(QStandardItemModel *model){
     if(model->rowCount()==0){
@@ -26,11 +26,11 @@ void ExportFile::recieveFromMain(QStandardItemModel *model){
             QStandardItem *curItem=model->itemFromIndex(si);
             QString childname;
             if(curItem->hasChildren()){
-//                QStandardItem *childitem= curItem->child(0,0);
                 int childRows=curItem->rowCount();
                 childname="_"+curItem->child(childRows-1,0)->text();
             }
-            QString curItemName=curItem->text()+childname;
+            QFileInfo info=QFileInfo(curItem->text());
+            QString curItemName=info.baseName()+childname+"."+info.suffix();
             QStandardItem *items=new QStandardItem(curItemName);
             items->setCheckable(true);
             exmodel->setItem(curIndex,0,items);
@@ -60,11 +60,23 @@ void ExportFile::on_buttonBox_accepted()
     }else{
         QString distpath=QFileDialog::getExistingDirectory();
         QString temp;
-        for(int i=0;i<exFiles.count();i++){
-            QStringList list=exFiles[i].split('_');
-            if(list.size()>1){
-                temp=list[1];
-                qDebug()<<distpath+"/";
+        if(exFiles.count()==1){
+            QString from=input+exFiles[0];
+            QString output=distpath+"/"+exFiles[0];
+            bool valid=QFile::copy(from,output);
+//            if(valid){
+//                alert->setMessage("导出成功！");
+//            }else{
+//                alert->setMessage("导出失败！！！");
+//            }
+//            alert->show();
+        }else{
+            for(int i=0;i<exFiles.count();i++){
+                QStringList list=exFiles[i].split('_');
+                if(list.size()>1){
+                    temp=list[1];
+                    qDebug()<<"from::"<<input+"/"+exFiles[i]<<"  output::"<<distpath+"/"+exFiles[i];
+                }
             }
         }
     }

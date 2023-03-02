@@ -62,15 +62,16 @@ MainWindow::MainWindow(QWidget *parent)
 void MainWindow::select(const QModelIndex &index){
     scene->clear();
     QModelIndex pindex=index.parent();
-    if(pindex.isValid()){
+    if(pindex.isValid()){//子结点
         suff=QFileInfo(pindex.data().toString()).suffix();
         QVariant childv=index.data();
         QString childname=childv.toString();
-        QString childtemp=loadfilename+"/"+childname;
-        if(QFile(childtemp+"_0."+suff).exists()){
-            childtemp+="_0."+suff;
-        }else if(QFile(childtemp+"_."+suff).exists()){
-            childtemp+="_."+suff;
+        QString pbasename=QFileInfo(pindex.data().toString()).baseName();
+        QString childtemp=loadfilename+"/"+pbasename+"_"+childname;
+        if(QFile(childtemp+"0."+suff).exists()){
+            childtemp+="0."+suff;
+        }else if(QFile(childtemp+"."+suff).exists()){
+            childtemp+="."+suff;
         }else{
             alertDia->setMessage("文件输出路径不匹配！");
             alertDia->show();
@@ -85,7 +86,7 @@ void MainWindow::select(const QModelIndex &index){
         view->show();
         onclicked=childtemp;
         onclickedRow=index.row();
-    }else{
+    }else{//父节点
         suff=QFileInfo(index.data().toString()).suffix();
         QVariant v=index.data();
         QString n=v.toString();
@@ -108,6 +109,9 @@ void MainWindow::algori_select(const QModelIndex &index){
     connect(holder,&threshold::returnResult,this,&MainWindow::appendAlgorithmResult);
     int mapindex=nameToindex.value(index.data().toString());
     Algom *al=hash.value(mapindex);
+//    QModelIndex pindex=index.parent();
+    QString rowname=model->index(onclickedRow,0).data().toString();
+    onclicked=loadfilename+"/"+rowname;
     if(al->getNamepy()==""||!QFile(algorithmpath+"/"+al->getNamepy()).exists()){
         alertDia->setMessage("算法文件加载失败！");
         alertDia->show();
@@ -131,19 +135,18 @@ void MainWindow::algori_select(const QModelIndex &index){
     }
 }
 //接收参数调节结果
-void MainWindow::appendAlgorithmResult(QString distname){
+void MainWindow::appendAlgorithmResult(QString distname,QString pathname){
     if(onclickedRow==-1){
         alertDia->setMessage(nullmessage);
         alertDia->show();
     }else{
         int childRows=model->item(onclickedRow,0)->rowCount();
         model->item(onclickedRow,0)->setChild(childRows,0,new QStandardItem(distname));
-//        model->item(onclickedRow,0)->child(childRows,0)--;
-        QString showpic=loadfilename+"/"+distname;
-        if(QFile(showpic+"_0."+suff).exists()){
-            showpic+="_0."+suff;
-        }else if(QFile(showpic+"_."+suff).exists()){
-            showpic+="_."+suff;
+        QString showpic=pathname;
+        if(QFile(showpic+"0."+suff).exists()){
+            showpic+="0."+suff;
+        }else if(QFile(showpic+"."+suff).exists()){
+            showpic+="."+suff;
         }else{
             alertDia->setMessage("文件输出路径不匹配！");
             alertDia->show();

@@ -74,13 +74,14 @@ void threshold::on_buttonBox_accepted()
     QString arg2=filename;//图片文件的全路径
     QString arg3=QFileInfo(filename).baseName();//图片文件的裸称
     QString arg4=profileDir+"/";//配置文件所在文件夹
-    QString arg5=outputdir+algorithmnameCn+distname;//文件输出全路径
+    QString arg5=outputdir+arg3+"_"+algorithmnameCn+distname;//文件输出全路径
     QString cmd="python3 "+arg1+" "+arg2+" "+arg3+" "+arg4+" "+arg5;
     if(profileflag&&profileDir.isEmpty()){
         alert->setMessage("请选择配置文件！");
     }else{
         p1->start(cmd);
         p1->waitForFinished();
+//        qDebug()<<cmd;
         emit returnResult(algorithmnameCn+distname,arg5);
         QString output=p1->readAll();
         if(output==""){

@@ -33,7 +33,7 @@ private:
     Ui::ExportFile *ui;
     Alert *alert;
     QList<QString> exFiles;
-    QString output;
+    QString input;
 };
 
 #endif // EXPORTFILE_H

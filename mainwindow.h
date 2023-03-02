@@ -125,7 +125,7 @@ private slots:
     void on_lineEdit_editingFinished();
 
     void on_lineEdit_textEdited(const QString &arg1);
-    void appendAlgorithmResult(QString distname);
+    void appendAlgorithmResult(QString distname,QString pathname);
 
 protected:
     Ui::MainWindow *ui;
