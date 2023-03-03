@@ -8,6 +8,7 @@
 #include "alert.h"
 #include <QFile>
 #include <QFileDialog>
+#include <QProcess>
 
 namespace Ui {
 class ExportFile;
@@ -29,11 +30,14 @@ public slots:
 private slots:
     void on_buttonBox_accepted();
 
+    void on_pushButton_clicked();
+
 private:
     Ui::ExportFile *ui;
     Alert *alert;
     QList<QString> exFiles;
     QString input;
+    QString distpath;
 };
 
 #endif // EXPORTFILE_H

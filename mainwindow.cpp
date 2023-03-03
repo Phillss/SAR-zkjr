@@ -196,8 +196,14 @@ void MainWindow::on_actiondaoru_triggered()
 //文件导出窗口
 void MainWindow::on_actiondaochu_triggered()
 {
-    emit sendToExport(model);
-    ef->show();
+    if(model->rowCount()==0){
+        alertDia=new Alert();
+        alertDia->setMessage("无导出项目！");
+        alertDia->show();
+    }else{
+        emit sendToExport(model);
+        ef->show();
+    }
 }
 
 //对比度调节窗口
